@@ -35,10 +35,15 @@ public class Chat extends JFrame implements ListDataListener, KeyListener{
 
 	private JPanel contentPane;
 	private String username;
+	private JLabel lblMensagem;
+	private JLabel lblCodigoDestinatrio;
 	private JTextField tf_mensagem;
 	private JTextField tf_destinatario;
 	private DefaultListModel model;
 	private Usuario usuarioConectado;
+	private JButton bt_enviar;
+	private JScrollPane scrollPane;
+	private JList messagesList;
 	
 	/**
 	 * Create the frame.
@@ -46,6 +51,17 @@ public class Chat extends JFrame implements ListDataListener, KeyListener{
 	public Chat(String username) {
 		this.username = username;		
 		usuarioConectado = new Usuario(username);
+		
+		criarJanela();
+		
+		criarWidgets();		
+		
+	}
+	
+	/*
+	 * Cria a janela do chat
+	 */
+	private void criarJanela() {
 		this.setTitle(MainWindow.APP_WINDOW_TITLE);
 		this.setVisible(true);
 		this.setResizable(false);
@@ -55,29 +71,33 @@ public class Chat extends JFrame implements ListDataListener, KeyListener{
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
-		JLabel lblMensagem = new JLabel("Mensagem:");
+	}
+	
+	/*
+	 * Cria os widgets(JTextField, JList, etc)
+	 */
+	private void criarWidgets() {
+		lblMensagem = new JLabel("Mensagem:");
 		lblMensagem.setBounds(10, 152, 67, 14);
 		contentPane.add(lblMensagem);
 		
 		tf_mensagem = new JTextField();
-		tf_mensagem.addKeyListener(this);
+		tf_mensagem.addKeyListener(this); //listener para tecla pressionada
 		tf_mensagem.setBounds(137, 149, 272, 20);
 		contentPane.add(tf_mensagem);
 		tf_mensagem.setColumns(10);
 		
-		JLabel lblCodigoDestinatrio = new JLabel("Codigo destinat\u00E1rio: ");
+		lblCodigoDestinatrio = new JLabel("Codigo destinat\u00E1rio: ");
 		lblCodigoDestinatrio.setBounds(10, 177, 119, 14);
 		contentPane.add(lblCodigoDestinatrio);
 		
 		tf_destinatario = new JTextField();
-		tf_destinatario.setBounds(136, 174, 141, 20);
-		
+		tf_destinatario.setBounds(136, 174, 141, 20);		
 		tf_destinatario.addKeyListener(this);
 		contentPane.add(tf_destinatario);
 		tf_destinatario.setColumns(10);
 		
-		JButton bt_enviar = new JButton("Enviar");
+		bt_enviar = new JButton("Enviar");
 		bt_enviar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				enviarMensagem();
@@ -86,17 +106,17 @@ public class Chat extends JFrame implements ListDataListener, KeyListener{
 		bt_enviar.setBounds(320, 173, 89, 23);
 		contentPane.add(bt_enviar);
 		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(10, 11, 399, 119);
+		contentPane.add(scrollPane);
+		
 		model = new DefaultListModel<>();
 		model.addListDataListener(this);		
 		
-		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 11, 399, 119);
-		contentPane.add(scrollPane);
-		JList messagesList = new JList(model);
+		messagesList = new JList(model);
 		scrollPane.setViewportView(messagesList);
 		messagesList.setLayoutOrientation(JList.VERTICAL);
 		messagesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
 	}
 	
 	private void enviarMensagem() {
