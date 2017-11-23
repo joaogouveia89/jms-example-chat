@@ -35,7 +35,7 @@ public class Usuario {
 		codigo = "";
 		if(this.nome != null) {
 			for(int  i = 0; i < nome.length(); i++) {
-				int charCode = (int)nome.charAt(i);
+				int charCode = nome.charAt(i);
 				codigo = codigo + charCode;
 			}
 		}

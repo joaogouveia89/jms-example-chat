@@ -1,12 +1,12 @@
 package dados;
 
 public class Mensagem {
-	private Usuario remetente;
-	private Usuario destino;
+	private String remetente;
+	private String destino;
 	private String mensagem;
 	
 	
-	public Mensagem(Usuario remetente, Usuario destino, String mensagem) {
+	public Mensagem(String remetente, String destino, String mensagem) {
 		super();
 		this.remetente = remetente;
 		this.destino = destino;
@@ -18,16 +18,16 @@ public class Mensagem {
 		super();
 	}
 
-	public Usuario getRemetente() {
+	public String getRemetente() {
 		return remetente;
 	}
-	public void setRemetente(Usuario remetente) {
+	public void setRemetente(String remetente) {
 		this.remetente = remetente;
 	}
-	public Usuario getDestino() {
+	public String getDestino() {
 		return destino;
 	}
-	public void setDestino(Usuario destino) {
+	public void setDestino(String destino) {
 		this.destino = destino;
 	}
 	public String getMensagem() {
@@ -39,9 +39,9 @@ public class Mensagem {
 	
 	@Override
 	public String toString() {
-		return this.getRemetente().getNome() +
+		return this.getRemetente() +
 				" para " +
-				this.getDestino().getNome() + 
+				this.getDestino() + 
 				": " +
 				this.getMensagem();
 	}
