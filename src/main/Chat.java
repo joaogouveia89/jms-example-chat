@@ -27,11 +27,16 @@ import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
+import javax.swing.JDialog;
+
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Chat extends JFrame implements
 ListDataListener,
@@ -63,11 +68,16 @@ MessageListener{
 	
 	//Objetos usuario
 	private String username;
+	private List<String> usuariosConectados;
+	private boolean checkingUsername = true;
 	/**
 	 * Create the frame.
 	 */
 	public Chat(String username) throws Exception{
 		this.username = username;
+		
+		usuariosConectados = new ArrayList<String>();
+		
 		criarJanela();		
 		criarWidgets();		
 		initJMS();
@@ -159,15 +169,22 @@ MessageListener{
 		connection.start();
 	}
 	
-	private void enviarMensagem() throws JMSException {		
-		Mensagem msg = new Mensagem();
-		msg.setRemetente(this.username);
-		msg.setDestino(tf_destinatario.getText());
-		msg.setMensagem(tf_mensagem.getText());
-		
-		TextMessage message = pubSession.createTextMessage();
-		message.setText(msg.toString());
-		publisher.publish(message);
+	private void enviarMensagem() throws JMSException {
+		if(!tf_mensagem.getText().equals("")) {
+			Mensagem msg = new Mensagem();
+			if(!tf_destinatario.getText().equals("")) {		
+				msg.setRemetente(this.username);
+				msg.setDestino(tf_destinatario.getText());
+				msg.setMensagem(tf_mensagem.getText());				
+			}else {
+				msg.setRemetente(this.username);
+				msg.setDestino("todos");
+				msg.setMensagem(tf_mensagem.getText());		
+			}
+			TextMessage message = pubSession.createTextMessage();
+			message.setText(msg.toString());
+			publisher.publish(message);
+		}		
 	}
 	
 	private void closeConn() throws JMSException {
@@ -221,9 +238,9 @@ MessageListener{
 			TextMessage textMessage = (TextMessage) message;
 			String []splitMessage = textMessage.getText().split(":");
 			// essa lógica só permite que o texto apareça pro usuário se ele for remetente ou destinatário da mesma
-			if(splitMessage[0].contains(this.username)) {
+			if(splitMessage[0].contains(this.username) || splitMessage[0].contains("todos")) {
 				model.addElement(textMessage.getText());
-			}			
+			}					
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
