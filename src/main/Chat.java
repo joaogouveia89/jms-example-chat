@@ -8,7 +8,6 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import dados.Mensagem;
-import dados.Usuario;
 import javax.swing.JList;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -51,7 +50,6 @@ MessageListener{
 	private JTextField tf_mensagem;
 	private JTextField tf_destinatario;
 	private DefaultListModel model;
-	private Usuario usuarioConectado;
 	private JButton bt_enviar;
 	private JScrollPane scrollPane;
 	private JList messagesList;
