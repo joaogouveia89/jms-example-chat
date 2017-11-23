@@ -219,7 +219,11 @@ MessageListener{
 	public void onMessage(Message message) {		
 		try {
 			TextMessage textMessage = (TextMessage) message;
-			model.addElement(textMessage.getText());
+			String []splitMessage = textMessage.getText().split(":");
+			// essa lógica só permite que o texto apareça pro usuário se ele for remetente ou destinatário da mesma
+			if(splitMessage[0].contains(this.username)) {
+				model.addElement(textMessage.getText());
+			}			
 		} catch (JMSException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
